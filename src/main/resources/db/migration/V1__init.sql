@@ -1,7 +1,8 @@
+-- V1__init.sql
 
 -- Tabela de usuários
 CREATE TABLE users (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -12,7 +13,7 @@ CREATE TABLE users (
 
 -- Tabela de badges
 CREATE TABLE badge (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
     icon_url VARCHAR(500)
@@ -20,12 +21,12 @@ CREATE TABLE badge (
 
 -- Tabela de perfis de usuário
 CREATE TABLE user_profile (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL UNIQUE,
-    xp INT,
-    level INT,
-    coins INT,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    xp INTEGER,
+    level INTEGER,
+    coins INTEGER,
+    CONSTRAINT fk_user_profile_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Tabela de relacionamento entre perfis e badges
@@ -33,24 +34,24 @@ CREATE TABLE user_badges (
     profile_id BIGINT NOT NULL,
     badge_id BIGINT NOT NULL,
     PRIMARY KEY (profile_id, badge_id),
-    FOREIGN KEY (profile_id) REFERENCES user_profile(id) ON DELETE CASCADE,
-    FOREIGN KEY (badge_id) REFERENCES badge(id) ON DELETE CASCADE
+    CONSTRAINT fk_user_badges_profile FOREIGN KEY (profile_id) REFERENCES user_profile(id) ON DELETE CASCADE,
+    CONSTRAINT fk_user_badges_badge FOREIGN KEY (badge_id) REFERENCES badge(id) ON DELETE CASCADE
 );
 
 -- Tabela de categorias
 CREATE TABLE category (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL
 );
 
 -- Tabela de transações
 CREATE TABLE transactions (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     value DECIMAL(19,2) NOT NULL,
     category_id BIGINT,
-    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE SET NULL
+    CONSTRAINT fk_transactions_category FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE SET NULL
 );
 
 -- Índices para melhorar performance
