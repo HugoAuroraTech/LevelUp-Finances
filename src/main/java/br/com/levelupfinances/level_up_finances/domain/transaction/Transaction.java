@@ -1,0 +1,34 @@
+package br.com.levelupfinances.level_up_finances.domain.transaction;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Table(name = "transactions")
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Transaction {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    private String description;
+
+    @Column(nullable = false)
+    private BigDecimal value;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+}
