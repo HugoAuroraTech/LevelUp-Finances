@@ -19,6 +19,6 @@ public class Category {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 }

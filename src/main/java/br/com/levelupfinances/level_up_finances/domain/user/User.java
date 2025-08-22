@@ -2,6 +2,9 @@ package br.com.levelupfinances.level_up_finances.domain.user;
 
 import br.com.levelupfinances.level_up_finances.domain.user.enums.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +18,6 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
@@ -39,6 +41,15 @@ public class User implements UserDetails {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public User() {}
+
+    public User(String name, String email, String passwordHash, UserRole role) {
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+    }
 
     @PrePersist
     public void onCreate() {
