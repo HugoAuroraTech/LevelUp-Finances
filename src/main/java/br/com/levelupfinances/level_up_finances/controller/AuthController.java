@@ -5,8 +5,12 @@ import br.com.levelupfinances.level_up_finances.domain.user.auth.dto.LoginReques
 import br.com.levelupfinances.level_up_finances.domain.user.auth.dto.RegisterRequestDTO;
 import br.com.levelupfinances.level_up_finances.domain.user.auth.dto.RegisterResponseDTO;
 import br.com.levelupfinances.level_up_finances.domain.user.auth.dto.TokenDTO;
+import br.com.levelupfinances.level_up_finances.exception.UserAlreadyExistsException;
 import br.com.levelupfinances.level_up_finances.infra.config.TokenService;
 import br.com.levelupfinances.level_up_finances.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +36,13 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
+    @Operation(description = "Faz o login e gera o token de acesso para o usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna o token de acesso JWT"),
+            @ApiResponse(responseCode = "401", description = "Credênciais inválidas")
+    })
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginRequestDTO requestDTO){
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid LoginRequestDTO requestDTO){
         var emailPassword = new UsernamePasswordAuthenticationToken(requestDTO.email(), requestDTO.password());
         var auth = this.authenticationManager.authenticate(emailPassword);
 
@@ -41,9 +50,14 @@ public class AuthController {
         return ResponseEntity.ok(new TokenDTO(token));
     }
 
+    @Operation(description = "Registra um novo usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Retorna o usuário cadastrado"),
+            @ApiResponse(responseCode = "400", description = "Usuário já cadastrado")
+    })
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody @Valid RegisterRequestDTO requestDTO){
-        if(userRepository.findByEmail(requestDTO.email()) != null) return ResponseEntity.badRequest().build();
+        if(userRepository.findByEmail(requestDTO.email()) != null) throw new UserAlreadyExistsException("Usuário já cadastrado");
 
         String passwordHash = new BCryptPasswordEncoder().encode(requestDTO.password());
 
