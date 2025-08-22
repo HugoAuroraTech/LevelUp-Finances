@@ -25,7 +25,7 @@ public class Transaction {
 
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal value;
 
     @ManyToOne
