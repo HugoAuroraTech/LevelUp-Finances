@@ -8,6 +8,7 @@ import br.com.levelupfinances.level_up_finances.domain.user.auth.dto.TokenDTO;
 import br.com.levelupfinances.level_up_finances.exception.UserAlreadyExistsException;
 import br.com.levelupfinances.level_up_finances.infra.config.TokenService;
 import br.com.levelupfinances.level_up_finances.repository.UserRepository;
+import br.com.levelupfinances.level_up_finances.service.user.UserProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
+
+    @Autowired
+    private UserProfileService userProfileService;
 
     @Autowired
     private UserRepository userRepository;
@@ -63,9 +67,10 @@ public class AuthController {
 
         User user = new User(requestDTO.name(), requestDTO.email(), passwordHash, requestDTO.role());
 
-        this.userRepository.save(user);
+        User userSave = this.userRepository.save(user);
+        this.userProfileService.createUserProfile(userSave);
 
-        RegisterResponseDTO responseDTO = RegisterResponseDTO.fromEntity(user);
+        RegisterResponseDTO responseDTO = RegisterResponseDTO.fromEntity(userSave);
 
         return ResponseEntity.ok().body(responseDTO);
     }

@@ -20,6 +20,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTransactionNotFound(TransactionNotFoundException e){
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                "Transaction_NOT_FOUND",
+                "Transação não encontrada"
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserNotFound(UserNotFoundException e){
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                "User_NOT_FOUND",
+                "Usuário não encontrado"
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleCategoryNotFound(CategoryNotFoundException e){
         ErrorResponseDTO error = new ErrorResponseDTO(

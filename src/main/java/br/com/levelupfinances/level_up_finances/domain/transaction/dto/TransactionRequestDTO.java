@@ -17,6 +17,8 @@ public record TransactionRequestDTO(
         @NotNull
         TransactionType transactionType,
         @NotNull
+        Long userId,
+        @NotNull
         Long categoryId
 ) {
 }

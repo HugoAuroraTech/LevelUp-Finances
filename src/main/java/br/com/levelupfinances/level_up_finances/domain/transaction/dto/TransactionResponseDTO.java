@@ -12,6 +12,7 @@ public record TransactionResponseDTO(
         String description,
         BigDecimal value,
         TransactionType transactionType,
+        Long userId,
         Long categoryId
 ) {
     public static TransactionResponseDTO fromEntity(Transaction transaction){
@@ -21,6 +22,7 @@ public record TransactionResponseDTO(
                 transaction.getDescription(),
                 transaction.getValue(),
                 transaction.getTransactionType(),
+                transaction.getUser().getId(),
                 transaction.getCategory().getId()
         );
     }
