@@ -1,4 +1,4 @@
-package br.com.levelupfinances.level_up_finances.service;
+package br.com.levelupfinances.level_up_finances.service.auth;
 
 import br.com.levelupfinances.level_up_finances.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

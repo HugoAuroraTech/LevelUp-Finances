@@ -11,6 +11,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InvalidCategoryDataException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidCategoryData(InvalidCategoryDataException e) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                "INVALID_CATEGORY_DATA",
+                e.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCategoryNotFound(CategoryNotFoundException e){
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                "CATEGORY_NOT_FOUND",
+                "Categoria não encontrada"
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDTO> handleUserAlreadyExists(UserAlreadyExistsException e) {
         ErrorResponseDTO error = new ErrorResponseDTO(

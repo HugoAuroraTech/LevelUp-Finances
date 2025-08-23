@@ -19,6 +19,9 @@ public class Category {
     @Column(nullable = false)
     private String title;
 
+    @Column(length = 20, nullable = false)
+    private String color;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<>();
 }

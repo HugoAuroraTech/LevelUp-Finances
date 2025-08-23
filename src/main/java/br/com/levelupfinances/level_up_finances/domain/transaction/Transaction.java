@@ -1,5 +1,6 @@
 package br.com.levelupfinances.level_up_finances.domain.transaction;
 
+import br.com.levelupfinances.level_up_finances.domain.transaction.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,10 @@ public class Transaction {
 
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal value;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransactionType transactionType;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
